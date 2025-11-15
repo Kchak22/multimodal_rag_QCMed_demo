@@ -1,0 +1,75 @@
+# Multimodal RAG Configuration
+
+# PDF Processing
+pdf_processing:
+  do_ocr: true
+  do_table_structure: true
+  generate_images: true
+  images_scale: 2
+  num_threads: 4
+
+# Text Chunking
+chunking:
+  chunk_size: 1024  # tokens
+  chunk_overlap: 100  # tokens
+  model_name: "nomic-ai/nomic-embed-text-v1.5"
+
+# Embedding Generation
+embedding:
+  model_name: "nomic-ai/nomic-embed-text-v1.5"
+  batch_size: 32
+  cache_folder: "./hf_cache"
+
+# Vector Store (ChromaDB)
+vector_store:
+  collection_name: "multimodal_rag"
+  persist_directory: "./chroma_db"
+  distance_metric: "cosine"  # cosine, l2, or ip (inner product)
+
+# LLM Configuration
+llm:
+  model_name: "llama3:latest"
+  base_url: "http://localhost:11434"
+  request_timeout: 120.0
+  temperature: 0.7
+
+# RAG Settings
+rag:
+  top_k: 3
+  return_context: false
+  
+  # Prompt template
+  prompt_template: Tu disposes d’un contexte ci-dessous. Utilise-le en priorité et fais une réponse correcte, concise et factuelle.
+    MÉCANISME DE CONTRÔLE :
+      1. Self-check interne (non affiché) :
+      - Vérifie que les éléments spécifiques de ta réponse sont bien présents dans le contexte.
+      - Si la réponse est d'ordre général et ne nécessite pas d'informations précises du contexte,
+          tu peux utiliser tes connaissances générales.
+      - Ne rejette pas automatiquement si le contexte est vide : analyse la nature de la question.
+
+      2. Self-consistency :
+      - Génère mentalement plusieurs formulations possibles.
+      - Choisis la réponse cohérente entre ces formulations.
+      - Si plusieurs versions internes divergent, considère que tu n'es pas certain.
+
+      3. Règle de certitude :
+      - Si tu peux répondre de manière fiable (via le contexte OU via connaissances générales non spécifiques),
+          réponds normalement.
+      - Si la question requiert des faits précis non présents dans le contexte,
+          ou si tu n'es pas suffisamment confiant, répond exactement :
+          "Je suis incapable de vous aider avec cela. Puis-je vous assister avec une autre question ?"
+
+      ---------------------
+      Contexte :
+      {context}
+      ---------------------
+
+      Requête : {query}
+
+      Réponse : la réponse est 
+
+# Paths
+paths:
+  pdfs: "./data/pdfs"
+  processed: "./data/processed"
+  embeddings: "./data/embeddings"
