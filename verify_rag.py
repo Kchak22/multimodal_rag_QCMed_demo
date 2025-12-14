@@ -44,9 +44,6 @@ def test_qdrant_vector_store():
     
     # Mock FastEmbed to avoid downloading models
     with patch("src.vector_store.QdrantVectorStore.__init__", return_value=None) as mock_init:
-        # We can't easily mock the internal logic without refactoring, 
-        # so let's try to run it but mock the heavy parts if possible.
-        # Actually, let's just use a temporary directory and let it run if dependencies are there.
         pass
 
     try:

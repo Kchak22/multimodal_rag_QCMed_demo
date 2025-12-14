@@ -26,17 +26,7 @@ class QdrantVectorStore:
         
         # Initialize Qdrant client
         self.client = QdrantClient(path=str(self.persist_directory))
-        
-        # Initialize Sparse Embedding model (using FastEmbed for BM25-like sparse vectors)
-        # We use a standard sparse model supported by Qdrant/FastEmbed
-        # 'pruned-bert-id-embedding' is a common one, or 'Qdrant/bm25' if available via fastembed interface
-        # For now, let's assume we handle dense externally (passed in) and sparse internally or externally.
-        # But to make it self-contained for hybrid, we might need to generate sparse vectors here if not provided.
-        # However, the previous interface expected embeddings to be passed in.
-        # To support hybrid, we need both.
-        
-        # Let's assume the caller will provide dense embeddings as before.
-        # For sparse, we can generate them here using FastEmbed if we want to simplify the caller.
+
         try:
             from fastembed import SparseTextEmbedding
             self.sparse_model = SparseTextEmbedding(model_name="Qdrant/bm25")
@@ -81,8 +71,6 @@ class QdrantVectorStore:
         """
         if ids is None:
             ids = [f"doc_{i}" for i in range(len(texts))]
-            # Qdrant prefers UUIDs or integers, but strings are supported in recent versions
-            # Ideally use uuid.uuid4().hex
             import uuid
             ids = [str(uuid.uuid4()) for _ in range(len(texts))]
         
@@ -100,7 +88,6 @@ class QdrantVectorStore:
         points = []
         for i in range(len(texts)):
             # Convert sparse embedding to Qdrant format
-            # FastEmbed returns objects with .indices and .values
             sparse_vector = models.SparseVector(
                 indices=sparse_embeddings[i].indices.tolist(),
                 values=sparse_embeddings[i].values.tolist()
@@ -139,31 +126,15 @@ class QdrantVectorStore:
             values=sparse_query.values.tolist()
         )
         
-        # We can use Qdrant's prefetch for hybrid search
-        # 1. Retrieve candidates with Sparse (BM25)
-        # 2. Rescore/Filter with Dense
-        # OR just simple weighted fusion.
-        
-        # Let's do a simple weighted hybrid search using Qdrant's query API (v1.10+) if available,
-        # or manual fusion. 
-        # For simplicity and effectiveness:
-        # Search with Dense, but boost with Sparse? Or vice versa?
-        # The user requested: "Fusion: One as filter, one as ranker. Use BM25 to quickly select a candidate set (e.g. 200 chunks). Within those, use dense similarity to pick the best 5–20."
-        
-        # Implementation of "BM25 as filter/candidate generator, Dense as ranker":
-        # 1. Search using Sparse vector to get top N (e.g. 50)
-        # 2. Rescore these N using Dense vector
-        
-        # Qdrant allows this via `prefetch`
-        
+        # 1. Search using Sparse vector to get top N (e.g. 50)      
         prefetch = [
             models.Prefetch(
                 query=sparse_vector,
                 using="sparse",
-                limit=50, # Candidate set size
+                limit=50,
             )
         ]
-        
+        # 2. Rescore these N using Dense vector
         results = self.client.query_points(
             collection_name=self.collection_name,
             prefetch=prefetch,

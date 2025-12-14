@@ -141,18 +141,12 @@ class HierarchicalChunker:
                     "text": text,
                     "metadata": {
                         "parent_path": parent_path,
-                        "type": "text", # Default, could detect tables/images
+                        "type": "text", 
                         "token_count": len(tokens)
                     }
                 })
-            else:
-                # Too big, recursive split
-                # We use a simple sliding window on the text for now, 
-                # but ideally we'd use a recursive character splitter.
-                # Re-using the logic from TextChunker but adapted here would be good,
-                # or just simple sliding window.
-                
-                # Let's use a sliding window on tokens for the sub-chunks
+            else:               
+                # Use a sliding window on tokens for the sub-chunks
                 stride = self.chunk_size - self.chunk_overlap
                 for i in range(0, len(tokens), stride):
                     chunk_ids = tokens[i:i + self.chunk_size]

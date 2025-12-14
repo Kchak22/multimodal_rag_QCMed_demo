@@ -88,16 +88,7 @@ class PDFProcessor:
     ) -> str:
         """Replace base64 embedded images with text summaries"""
         # This pattern matches the Docling embedded image format
-        pattern = r'!\[.*?\]\(data:image\/.*?;base64,[A-Za-z0-9+/=\n]+\)'
-
-        # We need to replace them in order. 
-        # Docling usually exports images in order.
-        # If summary_dict is keyed by filename, we might have a mismatch if we don't know which image is which.
-        # However, the previous implementation assumed an iterator.
-        
-        # Better approach: The caller should provide a list of summaries corresponding to the images in the doc.
-        # Or we rely on the fact that we processed them in order.
-        
+        pattern = r'!\[.*?\]\(data:image\/.*?;base64,[A-Za-z0-9+/=\n]+\)'        
         summary_iter = iter(summary_dict.values())
         
         def replacement(match):
@@ -142,8 +133,6 @@ class PDFProcessor:
                     print(f"Processing image {counter+1}...")
                     
                     try:
-                        # Docling ImageRef has a 'pil_image' property or we need to get it differently
-                        # Try different ways to get the PIL image
                         pil_image = None
                         
                         if hasattr(element.image, 'pil_image'):
@@ -155,8 +144,7 @@ class PDFProcessor:
                         elif hasattr(element.image, 'as_pil'):
                             pil_image = element.image.as_pil()
                         else:
-                            # Try to access via the document's image store
-                            # Docling stores images in result.document.pictures
+                            # Try to access via the document's image store. Docling stores images in result.document.pictures.
                             print(f"  ImageRef type: {type(element.image)}, attrs: {dir(element.image)}")
                         
                         if pil_image:
