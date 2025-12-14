@@ -12,7 +12,7 @@ class RAGEngine:
         self,
         vector_store,
         embedder,
-        llm_model: str = "llama3.2",
+        llm_model: str = "llama3",
         top_k: int = 3,
         ollama_base_url: str = "http://localhost:11434"
     ):
@@ -20,7 +20,7 @@ class RAGEngine:
         Initialize RAG engine
         
         Args:
-            vector_store: ChromaVectorStore instance
+            vector_store: QdrantVectorStore instance
             embedder: Embedder instance
             llm_model: Ollama model name
             top_k: Number of documents to retrieve
@@ -38,53 +38,36 @@ class RAGEngine:
         )
         
         self.prompt_template = """
-        Tu disposes d’un contexte ci-dessous. Utilise-le en priorité et fais une réponse correcte, concise et factuelle.
+You are a helpful assistant. Use only the provided context to answer questions. If the answer is not in the context, state that you do not know.
 
-        MÉCANISME DE CONTRÔLE :
-        1. Self-check interne (non affiché) :
-        - Vérifie que les éléments spécifiques de ta réponse sont bien présents dans le contexte.
-        - Si la réponse est d'ordre général et ne nécessite pas d'informations précises du contexte,
-            tu peux utiliser tes connaissances générales.
-        - Ne rejette pas automatiquement si le contexte est vide : analyse la nature de la question.
+IMPORTANT - Citation Instructions:
+- Each context chunk is labeled with its document name and section path
+- Format: "Document: [course name] | Section: [section path]"
+- When you cite, include both the document name and the section path
+- Example citation: [12-Cancer-du-cavum-2025-QCMed, Section 2.1.3 Les parois latérales]
+- Always cite the exact document and section path provided
 
-        2. Self-consistency :
-        - Génère mentalement plusieurs formulations possibles.
-        - Choisis la réponse cohérente entre ces formulations.
-        - Si plusieurs versions internes divergent, considère que tu n'es pas certain.
+---------------------
+Context:
+{context}
+---------------------
 
-        3. Règle de certitude :
-        - Si tu peux répondre de manière fiable (via le contexte OU via connaissances générales non spécifiques),
-            réponds normalement.
-        - Si la question requiert des faits précis non présents dans le contexte,
-            ou si tu n'es pas suffisamment confiant, répond exactement :
-            "Je suis incapable de vous aider avec cela. Puis-je vous assister avec une autre question ?"
+Question: {query}
 
-        ---------------------
-        Contexte :
-        {context}
-        ---------------------
-
-        Requête : {query}
-
-        Réponse : la réponse est 
-        """
+Answer (with document and section path citations):
+"""
     
     def retrieve(self, query: str) -> List[Dict]:
         """
-        Retrieve relevant documents for a query
-        
-        Args:
-            query: Query text
-            
-        Returns:
-            List of retrieved documents with metadata
+        Retrieve relevant documents for a query using Hybrid Search
         """
         # Generate query embedding
         query_embedding = self.embedder.embed_query(query)
         
-        # Search vector store
+        # Search vector store (Qdrant Hybrid)
         results = self.vector_store.query(
-            query_embedding=query_embedding,
+            query_text=query,
+            query_dense_embedding=query_embedding,
             top_k=self.top_k
         )
         
@@ -92,6 +75,7 @@ class RAGEngine:
         retrieved_docs = []
         for i in range(len(results["documents"])):
             retrieved_docs.append({
+                "id": results["ids"][i],
                 "text": results["documents"][i],
                 "distance": results["distances"][i],
                 "metadata": results["metadatas"][i]
@@ -101,30 +85,29 @@ class RAGEngine:
     
     def generate_context(self, retrieved_docs: List[Dict]) -> str:
         """
-        Combine retrieved documents into context string
-        
-        Args:
-            retrieved_docs: List of retrieved documents
-            
-        Returns:
-            Combined context string
+        Combine retrieved documents into context string with clear section references
+        Includes source document (course title) and section path
         """
-        contexts = [doc["text"] for doc in retrieved_docs]
-        return "\n\n---\n\n".join(contexts)
+        contexts = []
+        for i, doc in enumerate(retrieved_docs):
+            text = doc.get("text", "")
+            meta = doc.get("metadata", {})
+            path = meta.get("parent_path", "Unknown Section")
+            source_doc = meta.get("source_document", "Unknown Document")
+            
+            # Create a clear, citable reference with document title and section path
+            context_str = f"--- Document: {source_doc} | Section: {path} ---\n{text}"
+            contexts.append(context_str)
+            
+        return "\n\n".join(contexts)
     
     def query(self, query: str, return_context: bool = False) -> Dict:
         """
         Execute full RAG query: retrieve + generate
-        
-        Args:
-            query: User query
-            return_context: If True, include retrieved context in response
-            
-        Returns:
-            Dict with answer and optionally retrieved context
         """
         # Retrieve relevant documents
         retrieved_docs = self.retrieve(query)
+        print("Retrieved documents:", retrieved_docs)
         
         # Generate context
         context = self.generate_context(retrieved_docs)
@@ -147,12 +130,6 @@ class RAGEngine:
     def stream_query(self, query: str):
         """
         Stream the response token by token
-        
-        Args:
-            query: User query
-            
-        Yields:
-            Response tokens
         """
         retrieved_docs = self.retrieve(query)
         context = self.generate_context(retrieved_docs)

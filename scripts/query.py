@@ -7,7 +7,7 @@ import sys
 sys.path.append(str(Path(__file__).parent.parent))
 
 from src.embedder import Embedder
-from src.vector_store import ChromaVectorStore
+from src.vector_store import QdrantVectorStore
 from src.rag_engine import RAGEngine
 
 
@@ -25,7 +25,7 @@ def main():
         "-c",
         type=str,
         default="multimodal_rag",
-        help="ChromaDB collection name"
+        help="Qdrant collection name"
     )
     parser.add_argument(
         "--top-k",
@@ -44,12 +44,14 @@ def main():
     parser.add_argument(
         "--show-context",
         action="store_true",
-        help="Show retrieved context"
+        help="Show retrieved context",
+        default=True
     )
     parser.add_argument(
         "--stream",
         action="store_true",
-        help="Stream the response"
+        help="Stream the response",
+        default=True
     )
     
     args = parser.parse_args()
@@ -58,7 +60,7 @@ def main():
     print("=== Initializing RAG System ===")
     embedder = Embedder()
     
-    vector_store = ChromaVectorStore(
+    vector_store = QdrantVectorStore(
         collection_name=args.collection_name,
         reset_collection=False
     )
@@ -96,9 +98,9 @@ def interactive_mode():
     print("=== Interactive Query Mode ===")
     print("Type 'exit' to quit\n")
     
-    # Initialize once
+    # Initialize once - using the same collection name as indexing
     embedder = Embedder()
-    vector_store = ChromaVectorStore(collection_name="multimodal_rag")
+    vector_store = QdrantVectorStore(collection_name="multimodal_rag_qcmed")
     rag = RAGEngine(vector_store=vector_store, embedder=embedder)
     
     while True:

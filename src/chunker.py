@@ -1,7 +1,8 @@
 """
 Text chunking with token-based sliding window
 """
-from typing import List
+from typing import List, Dict
+import re
 from transformers import AutoTokenizer
 
 
@@ -91,3 +92,106 @@ class TextChunker:
             "chunk_overlap": self.chunk_overlap,
             "avg_tokens_per_chunk": len(input_ids) / len(chunks) if chunks else 0
         }
+
+
+class HierarchicalChunker:
+    """Chunks text based on Markdown structure with recursive fallback"""
+    
+    def __init__(
+        self,
+        chunk_size: int = 512,
+        chunk_overlap: int = 50,
+        tokenizer_name: str = "nomic-ai/nomic-embed-text-v1.5"
+    ):
+        self.chunk_size = chunk_size
+        self.chunk_overlap = chunk_overlap
+        self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
+        
+    def chunk_markdown(self, markdown_text: str) -> List[Dict]:
+        """
+        Split markdown by headers and then recursively if needed.
+        Returns list of dicts with text and metadata.
+        """
+        chunks = []
+        lines = markdown_text.split('\n')
+        
+        current_headers = {} # Level -> Header Text
+        current_section_lines = []
+        
+        def flush_section():
+            if not current_section_lines:
+                return
+                
+            text = "\n".join(current_section_lines).strip()
+            if not text:
+                return
+                
+            # Construct path string
+            # Sort keys to ensure order H1 -> H2 -> H3
+            sorted_levels = sorted(current_headers.keys())
+            path_parts = [current_headers[l] for l in sorted_levels]
+            parent_path = " > ".join(path_parts)
+            
+            # Check size
+            tokens = self.tokenizer.encode(text, add_special_tokens=False)
+            
+            if len(tokens) <= self.chunk_size:
+                # Small enough
+                chunks.append({
+                    "text": text,
+                    "metadata": {
+                        "parent_path": parent_path,
+                        "type": "text", # Default, could detect tables/images
+                        "token_count": len(tokens)
+                    }
+                })
+            else:
+                # Too big, recursive split
+                # We use a simple sliding window on the text for now, 
+                # but ideally we'd use a recursive character splitter.
+                # Re-using the logic from TextChunker but adapted here would be good,
+                # or just simple sliding window.
+                
+                # Let's use a sliding window on tokens for the sub-chunks
+                stride = self.chunk_size - self.chunk_overlap
+                for i in range(0, len(tokens), stride):
+                    chunk_ids = tokens[i:i + self.chunk_size]
+                    chunk_text = self.tokenizer.decode(chunk_ids, skip_special_tokens=True)
+                    
+                    chunks.append({
+                        "text": chunk_text,
+                        "metadata": {
+                            "parent_path": parent_path,
+                            "type": "text",
+                            "token_count": len(chunk_ids),
+                            "is_subchunk": True
+                        }
+                    })
+            
+            current_section_lines.clear()
+
+        for line in lines:
+            # Check for headers
+            header_match = re.match(r'^(#{1,6})\s+(.+)$', line)
+            if header_match:
+                # Flush previous section
+                flush_section()
+                
+                level = len(header_match.group(1))
+                title = header_match.group(2).strip()
+                
+                # Update headers context
+                # Clear deeper levels
+                keys_to_remove = [k for k in current_headers if k >= level]
+                for k in keys_to_remove:
+                    del current_headers[k]
+                
+                current_headers[level] = title
+            else:
+                current_section_lines.append(line)
+                
+        # Flush last section
+        flush_section()
+        
+        return chunks
+

@@ -1,40 +1,39 @@
-# Multimodal RAG with ChromaDB for QCMed (Demo- still in progress)
+# Multimodal RAG with Qdrant & VLM for QCMed
 
-A Python-based Retrieval-Augmented Generation (RAG) system for querying PDF medical courses. Uses Docling for structured PDF parsing, ChromaDB for vector storage, and Ollama for local LLM inference.
+A Python-based Retrieval-Augmented Generation (RAG) system for querying PDF medical courses. This enhanced version uses **Docling** for structured parsing, **Ollama VLM** (e.g., LLaVA) for image description, **Hierarchical Chunking** for better context, and **Qdrant** for Hybrid Search (Dense + Sparse).
 
 ## Features
 
-- **Multimodal PDF Processing**: Extract text, tables, images, and formulas using Docling
-- **Image Summarization**: Replace embedded images with text summaries
-- **Token-based Chunking**: Smart text chunking with overlap for better context
-- **ChromaDB Vector Store**: Fast, local vector database
-- **Local LLM**: Privacy-friendly querying with Ollama
-- **CLI Scripts**: Process PDFs, index documents, and query from command line
-- **Jupyter Notebook**: Interactive testing and experimentation
+- **Multimodal PDF Processing**: Extract text, tables, and images using Docling.
+- **VLM Image Description**: Automatically generates textual descriptions for images using local Vision Language Models (Ollama).
+- **Hierarchical Chunking**: Smart splitting by Markdown headers with recursive fallback and parent context injection.
+- **Hybrid Search**: Combines semantic search (Dense) with keyword search (Sparse/BM25) using Qdrant.
+- **Local Privacy**: Fully local execution with Ollama and local vector store.
 
 ## Architecture
 
 ```
-PDF → Docling → Markdown → Chunking → Embeddings → ChromaDB
-                                                        ↓
-                                              Query → Retrieval → LLM → Answer
+PDF → Docling → Images → VLM (Ollama) → Descriptions
+         ↓                                    ↓
+      Markdown <------------------------------+
+         ↓
+Hierarchical Chunking → Hybrid Embeddings (Dense + Sparse) → Qdrant
+                                                                ↓
+                                                      Query → Retrieval → LLM → Answer
 ```
 
 ## Prerequisites
 
-1. **Python 3.10+**
+1. **Python 3.10+** (Python 3.13 supported)
 2. **Ollama** installed and running:
    ```bash
    # Install Ollama: https://ollama.ai
-   ollama pull llama3b:latest
-   ```
-3. **Tesseract OCR** (for OCR functionality): (not used for now)
-   ```bash
-   # macOS
-   brew install tesseract
    
-   # Ubuntu/Debian
-   sudo apt-get install tesseract-ocr
+   # Pull LLM for reasoning
+   ollama pull llama3:latest
+   
+   # Pull VLM for image description
+   ollama pull llava
    ```
 
 ## Installation
@@ -45,8 +44,8 @@ git clone <your-repo-url>
 cd multimodal-rag-QCMed_demo
 
 # Create virtual environment
-python -m venv venv
-source venv/bin/activate  
+python -m venv env
+source env/bin/activate  
 
 # Install dependencies
 pip install -r requirements.txt
@@ -54,149 +53,95 @@ pip install -r requirements.txt
 
 ## Quick Start
 
-### 1. Process a PDF
+### 1. Process a PDF (with VLM)
+
+Convert PDF to Markdown and generate image descriptions:
 
 ```bash
 python scripts/process_pdf.py data/pdfs/cours_1.pdf \
   --output data/processed/cours_1.md \
-  --use-summaries
+  --vlm-model llava
 ```
 
-### 2. Index the Document
+*Arguments:*
+- `--no-ocr`: Disable OCR (faster but less accurate for scanned docs).
+- `--no-images`: Skip image extraction.
+- `--vlm-model`: Specify VLM model (default: `llava`).
+
+### 2. Index the Document (Qdrant)
+
+Index the processed Markdown into Qdrant with Hierarchical Chunking:
 
 ```bash
-python scripts/index.py data/processed/cours_1.md \
+python scripts/index.py data/processed/ \
   --collection-name multimodal_rag_qcmed \
-  --chunk-size 1024 \
-  --chunk-overlap 100
+  --chunk-size 512 \
+  --chunk-overlap 50 \
+  --reset
 ```
+
+*Arguments:*
+- `--reset`: Deletes existing collection before indexing.
+- `--chunk-size`: Max tokens per chunk (default: 512).
 
 ### 3. Query the System
 
+Run a Hybrid Search query:
+
 ```bash
-# Single query
-python scripts/query.py "Quels sont les critères majeurs de Duke pour l’endocardite infectieuse ?" \
+# Single query with context display
+python scripts/query.py "Quels sont les critères majeurs de Duke ?" \
   --collection-name multimodal_rag_qcmed \
-  --top-k 3
+  --top-k 5 \
+  --show-context
 
 # Interactive mode
 python scripts/query.py
 ```
 
+*Arguments:*
+- `--show-context`: Print retrieved chunks and their sources.
+- `--stream`: Stream the answer token-by-token.
+
 ## Project Structure
 
 ```
-multimodal-rag-chromadb/
+multimodal-rag-QCMed_demo/
 ├── data/
 │   ├── pdfs/              # Input PDF files
 │   └── processed/         # Converted markdown files
 ├── src/
-│   ├── pdf_processor.py   # PDF → Markdown conversion
-│   ├── image_summarizer.py # Image summary management
-│   ├── chunker.py         # Text chunking
-│   ├── embedder.py        # Embedding generation
-│   ├── vector_store.py    # ChromaDB interface
-│   └── rag_engine.py      # RAG query engine
+│   ├── pdf_processor.py   # Docling conversion
+│   ├── vlm_processor.py   # Image description (Ollama)
+│   ├── chunker.py         # Hierarchical chunking
+│   ├── embedder.py        # Dense embedding generation
+│   ├── vector_store.py    # Qdrant interface (Hybrid)
+│   └── rag_engine.py      # RAG logic & System Prompt
 ├── scripts/
 │   ├── process_pdf.py     # CLI: Process PDFs
 │   ├── index.py           # CLI: Index documents
 │   └── query.py           # CLI: Query system
-├── notebooks/
-│   └── test_notebook.ipynb  # Interactive testing
-├── chroma_db/             # ChromaDB persistence (auto-created)
+├── qdrant_db/             # Qdrant local storage (auto-created)
 ├── requirements.txt
 └── README.md
 ```
 
 ## Configuration
 
-Key parameters can be adjusted in the scripts or notebook:
+Key parameters can be adjusted in the scripts:
 
-- **Chunk Size**: Default 1024 tokens
-- **Chunk Overlap**: Default 100 tokens
-- **Embedding Model**: nomic-ai/nomic-embed-text-v1.5
-- **LLM Model**: llama3b:latest (or any Ollama model)
-- **Top-K Retrieval**: Default 3 documents
-
-## Advanced Usage
-
-### Custom Image Summaries
-
-Edit `src/image_summarizer.py` to add custom summaries:
-
-```python
-from src.image_summarizer import add_image_summary
-
-add_image_summary(
-    "my_diagram.png",
-    "A flowchart showing the data pipeline..."
-)
-```
-
-### Batch Processing
-
-Process multiple PDFs:
-
-```bash
-for pdf in data/pdfs/*.pdf; do
-    python scripts/process_pdf.py "$pdf" --use-summaries
-done
-
-python scripts/index.py data/processed/ --reset
-```
-
-### Different Embedding Models
-
-Change in `src/embedder.py`:
-
-```python
-embedder = Embedder(
-    model_name="sentence-transformers/all-MiniLM-L6-v2",
-    batch_size=64
-)
-```
+- **Chunking**: Default 512 tokens, 50 overlap.
+- **Embeddings**: `nomic-ai/nomic-embed-text-v1.5` (Dense), `Qdrant/bm25` (Sparse).
+- **LLM**: Defaults to `llama3:latest`.
+- **VLM**: Defaults to `llava`.
 
 ## Troubleshooting
 
-### Ollama Connection Issues
-
+### Ollama Connection
+Ensure Ollama is running:
 ```bash
-# Check if Ollama is running
-curl http://localhost:11434/api/tags
-
-# Start Ollama server
 ollama serve
 ```
 
-### ChromaDB Persistence
-
-ChromaDB automatically persists to `./chroma_db`. To reset:
-
-```bash
-rm -rf chroma_db
-```
-
-### Memory Issues
-
-For large documents, reduce batch size:
-
-```bash
-python scripts/index.py document.md --batch-size 8
-```
-
-
-## References
-
-- [Docling](https://github.com/docling-project/docling) - Document understanding
-- [ChromaDB](https://www.trychroma.com/) - Vector database
-- [Ollama](https://ollama.ai/) - Local LLM runtime
-- [nomic-embed-text](https://huggingface.co/nomic-ai/nomic-embed-text-v1.5) - Embedding model
-
-
-## What's next : 
-- Fixing Docling pdf to markdown conversion 
-- Trying Docling's hierarchical RAG & using pre-computed descriptions for figures and tables (using OCR)
-- Trying better models (Adding ability to use API-based models and longer-context models (gemini...) wela with vision capabilities)
-- Analyse des résultats
-
-
+### Dependency Issues
+If you face issues with `scipy` or `pandas` on macOS, ensure you are using the pinned versions in `requirements.txt` or try Python 3.11/3.12.

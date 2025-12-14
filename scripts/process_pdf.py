@@ -7,12 +7,11 @@ import sys
 sys.path.append(str(Path(__file__).parent.parent))
 
 from src.pdf_processor import PDFProcessor
-from src.image_summarizer import get_image_summaries
-
+from src.vlm_processor import VLMProcessor
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Process PDF to markdown with Docling"
+        description="Process PDF to markdown with Docling and VLM"
     )
     parser.add_argument(
         "pdf_path",
@@ -29,7 +28,7 @@ def main():
     parser.add_argument(
         "--no-ocr",
         action="store_true",
-        default=True,
+        default=False, # Default to OCR enabled
         help="Disable OCR"
     )
     parser.add_argument(
@@ -38,9 +37,10 @@ def main():
         help="Don't extract images"
     )
     parser.add_argument(
-        "--use-summaries",
-        action="store_true",
-        help="Replace images with text summaries"
+        "--vlm-model",
+        type=str,
+        default="llava",
+        help="VLM model name for image description (default: llava)"
     )
     
     args = parser.parse_args()
@@ -56,18 +56,27 @@ def main():
         generate_images=not args.no_images
     )
     
-    # Get image summaries if requested
-    image_summaries = None
-    if args.use_summaries:
-        image_summaries = get_image_summaries()
+    # Initialize VLM if images are enabled
+    vlm_processor = None
+    if not args.no_images:
+        try:
+            vlm_processor = VLMProcessor(model_name=args.vlm_model)
+        except Exception as e:
+            print(f"Warning: Could not initialize VLM: {e}. Image descriptions will be skipped.")
     
     # Convert PDF
     print(f"Processing PDF: {args.pdf_path}")
-    markdown = processor.convert_to_markdown(
-        pdf_path=args.pdf_path,
-        output_path=output_path,
-        image_summaries=image_summaries
-    )
+    if vlm_processor:
+        markdown = processor.process_pdf_with_vlm(
+            pdf_path=args.pdf_path,
+            output_path=output_path,
+            vlm_processor=vlm_processor
+        )
+    else:
+        markdown = processor.convert_to_markdown(
+            pdf_path=args.pdf_path,
+            output_path=output_path
+        )
     
     print(f"\nMarkdown saved to: {output_path}")
     print(f"Length: {len(markdown)} characters")
