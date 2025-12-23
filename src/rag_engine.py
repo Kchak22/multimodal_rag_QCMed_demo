@@ -38,23 +38,24 @@ class RAGEngine:
         )
         
         self.prompt_template = """
-You are a helpful assistant. Use only the provided context to answer questions. If the answer is not in the context, state that you do not know.
+Vous êtes un assistant utile. Utilisez uniquement le contexte fourni pour répondre aux questions. Si la réponse n’est pas dans le contexte, indiquez que vous ne savez pas.
 
-IMPORTANT - Citation Instructions:
-- Each context chunk is labeled with its document name and section path
-- Format: "Document: [course name] | Section: [section path]"
-- When you cite, include both the document name and the section path
-- Example citation: [12-Cancer-du-cavum-2025-QCMed, Section 2.1.3 Les parois latérales]
-- Always cite the exact document and section path provided
+IMPORTANT - Instructions de citation :
+- Chaque extrait de contexte est étiqueté avec le nom du document et le chemin de la section
+- Format : "Document : [nom du cours] | Section : [chemin de la section]"
+- Lorsque vous citez, incluez à la fois le nom du document et le chemin de la section
+- Exemple de citation : [12-Cancer-du-cavum-2025-QCMed, Section 2.1.3 Les parois latérales]
+- Citez toujours exactement le document et le chemin de la section fournis
 
 ---------------------
-Context:
+Contexte :
 {context}
 ---------------------
 
-Question: {query}
+Question : {query}
 
-Answer (with document and section path citations):
+Réponse (avec citations du document et du chemin de section) :
+
 """
     
     def retrieve(self, query: str) -> List[Dict]:
@@ -107,7 +108,6 @@ Answer (with document and section path citations):
         """
         # Retrieve relevant documents
         retrieved_docs = self.retrieve(query)
-        print("Retrieved documents:", retrieved_docs)
         
         # Generate context
         context = self.generate_context(retrieved_docs)

@@ -100,7 +100,7 @@ def interactive_mode():
     
     # Initialize once - using the same collection name as indexing
     embedder = Embedder()
-    vector_store = QdrantVectorStore(collection_name="multimodal_rag_qcmed")
+    vector_store = QdrantVectorStore(collection_name="multimodal_rag", reset_collection=False)
     rag = RAGEngine(vector_store=vector_store, embedder=embedder)
     
     while True:

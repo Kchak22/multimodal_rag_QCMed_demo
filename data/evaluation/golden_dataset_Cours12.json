@@ -1,0 +1,118 @@
+{
+  "metadata": {
+    "language": "fr",
+    "domain": "medical",
+    "topic": "Cancer du cavum (CNP)",
+    "version": "1.0",
+    "description": "Golden dataset pour évaluation RAG en français"
+  },
+  "samples": [
+    {
+      "id": "Q1",
+      "type": "factual",
+      "question": "Quelle est la place du cancer du cavum parmi les cancers des VADS en Tunisie ?",
+      "answer": "Il occupe la deuxième place des cancers des VADS après le cancer du larynx.",
+      "source": "Introduction – Généralités"
+    },
+    {
+      "id": "Q2",
+      "type": "factual",
+      "question": "Quel est le type histologique le plus fréquent du cancer du cavum ?",
+      "answer": "Le carcinome épidermoïde non kératinisant, appelé UCNT (Undifferentiated Carcinoma of Nasopharyngeal Type).",
+      "source": "Anatomopathologie – Forme commune"
+    },
+    {
+      "id": "Q3",
+      "type": "factual",
+      "question": "Quels sont les trois principaux relais lymphatiques du cavum ?",
+      "answer": "Le ganglion rétro-pharyngé de Rouvière, la confluence du spinal accessoire et de la veine jugulaire (secteurs IIb et Va), et les ganglions sous-digastriques et jugulaires internes (IIa, III, IV).",
+      "source": "Drainage lymphatique"
+    },
+    {
+      "id": "Q4",
+      "type": "factual",
+      "question": "Quel est l’âge moyen de survenue du cancer du cavum dans les pays à haut risque ?",
+      "answer": "Environ 50 ans.",
+      "source": "Épidémiologie – Âge"
+    },
+    {
+      "id": "Q5",
+      "type": "factual",
+      "question": "Quels sont les principaux signes neuro-ophtalmiques du cancer du cavum ?",
+      "answer": "Diplopie par atteinte du VI, névralgie faciale par atteinte du V, trismus par atteinte du trijumeau moteur, exophtalmie ou paralysie oculomotrice.",
+      "source": "Signes cliniques – Signes neuro-ophtalmiques"
+    },
+
+    {
+      "id": "Q6",
+      "type": "summary",
+      "question": "Pourquoi le diagnostic du cancer du cavum est-il souvent tardif ?",
+      "answer": "En raison de la localisation profonde du nasopharynx, de l’accès difficile à l’examen clinique et d’une symptomatologie trompeuse liée à l’envahissement des structures avoisinantes.",
+      "source": "Introduction – Généralités"
+    },
+    {
+      "id": "Q7",
+      "type": "summary",
+      "question": "Quels sont les facteurs impliqués dans l’étiologie du cancer du cavum ?",
+      "answer": "Des facteurs viraux (EBV), génétiques, environnementaux et alimentaires interagissent dans la survenue du cancer du cavum.",
+      "source": "Étiologie"
+    },
+    {
+      "id": "Q8",
+      "type": "summary",
+      "question": "Quels éléments cliniques et paracliniques influencent le pronostic du cancer du cavum ?",
+      "answer": "L’atteinte des paires crâniennes, l’extension intracrânienne, les adénopathies volumineuses ou basses, la présence de métastases, l’histologie kératinisante et l’élévation persistante des anticorps anti-EBV.",
+      "source": "Pronostic"
+    },
+    {
+      "id": "Q9",
+      "type": "summary",
+      "question": "Quels examens sont utilisés pour le bilan d’extension locorégionale du cancer du cavum ?",
+      "answer": "L’IRM du cavum est l’examen de référence, complétée si nécessaire par un scanner.",
+      "source": "Bilan d’extension – Locorégional"
+    },
+    {
+      "id": "Q10",
+      "type": "summary",
+      "question": "Comment se manifeste une forme tubaire du cancer du cavum ?",
+      "answer": "Par une otite séro-muqueuse isolée, confirmée par imagerie, endoscopie et biopsie.",
+      "source": "Formes cliniques – Formes tubaires"
+    },
+
+    {
+      "id": "Q11",
+      "type": "extraction",
+      "question": "Quelles sont les zones géographiques à forte incidence du cancer du cavum et leurs taux ?",
+      "answer": "L’Asie du sud-est avec une incidence comprise entre 30 et 80 cas pour 100 000 habitants par an.",
+      "source": "Épidémiologie – Incidence"
+    },
+    {
+      "id": "Q12",
+      "type": "extraction",
+      "question": "Quels examens biologiques sont réalisés avant le traitement du cancer du cavum ?",
+      "answer": "Sérologie EBV, marqueurs tumoraux (Cyfra 21, ADN viral), hémogramme, VS, bilan rénal et hépatique, dosage du calcium, LDH, phosphatases alcalines et bilan thyroïdien.",
+      "source": "Bilan biologique"
+    },
+    {
+      "id": "Q13",
+      "type": "extraction",
+      "question": "Quels sont les critères T de la classification TNM du cancer du cavum ?",
+      "answer": "T1 : limité au nasopharynx ; T2 : extension parapharyngée ; T3 : envahissement osseux ; T4 : extension intracrânienne ou aux nerfs crâniens.",
+      "source": "Classification TNM"
+    },
+    {
+      "id": "Q14",
+      "type": "extraction",
+      "question": "Quelles sont les formes histologiques rares du cancer du cavum ?",
+      "answer": "Carcinomes basaloïdes, lymphomes B ou T/NK, plasmocytomes, sarcomes myéloïdes, adénocarcinomes glandulaires et rhabdomyosarcomes.",
+      "source": "Anatomopathologie – Formes particulières"
+    },
+    {
+      "id": "Q15",
+      "type": "extraction",
+      "question": "Quels examens permettent d’évaluer l’extension à distance du cancer du cavum ?",
+      "answer": "Scanner thoracique, imagerie abdominale, scintigraphie osseuse et TEP-TDM pour les formes avancées.",
+      "source": "Bilan d’extension à distance"
+    }
+  ]
+}

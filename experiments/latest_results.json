@@ -1,0 +1,145 @@
+{
+  "aggregated": {
+    "precision_contexte_mean": 1.0,
+    "fidelite_mean": 0.92,
+    "pertinence_mean": 0.86,
+    "precision_sources_mean": 0.9733333333333333
+  },
+  "raw_scores": [
+    {
+      "precision_contexte": 1.0,
+      "fidelite": 1.0,
+      "pertinence": 1.0,
+      "precision_sources": 1.0,
+      "commentaire": "La réponse est précise, fidèle et pertinente en ce qui concerne la place du cancer du cavum parmi les cancers des VADS en Tunisie.",
+      "question": "Quelle est la place du cancer du cavum parmi les cancers des VADS en Tunisie ?",
+      "SystemAnswer": "La place du cancer du cavum parmi les cancers des VADS en Tunisie est la deuxième, selon le contexte fourni : \"Le cancer du nasopharynx ou cavum (CNP) est fréquent en Tunisie puisqu’il occupe la deuxième place des cancers des VADS après le cancer du larynx.\" [Document : 12-Cancer-du-cavum-2025-QCMed | Section: 1 Introduction]"
+    },
+    {
+      "precision_contexte": 1.0,
+      "fidelite": 1.0,
+      "pertinence": 1.0,
+      "precision_sources": 1.0,
+      "commentaire": "La réponse est très précise et correspond exactement au contexte, elle est également fiable et pertinente, les sources sont bien citées.",
+      "question": "Quel est le type histologique le plus fréquent du cancer du cavum ?",
+      "SystemAnswer": "Selon le document \"12-Cancer-du-cavum-2025-QCMed\" | Section: 1 Introduction, le type histologique le plus fréquent du cancer du cavum est représenté par le carcinome épidermoïde non kératinisant dont le prototype correspond au carcinome indifférencié de type nasopharyngé connu par l’usage sous l’acronyme UCNT ( *Undifferentiated Carcinoma of Nasopharyngeal Type* ) [1, Section: 1 Introduction].\n\nCitation : \"Le type histologique le plus fréquent est représenté par le carcinome épidermoïde non kératinisant dont le prototype correspond au carcinome indifférencié de type nasopharyngé connu par l’usage sous l’acronyme UCNT ( *Undifferentiated Carcinoma of Nasopharyngeal Type* )\"\n\n[1, Section: 1 Introduction]"
+    },
+    {
+      "precision_contexte": 1.0,
+      "fidelite": 0.5,
+      "pertinence": 0.0,
+      "precision_sources": 1.0,
+      "commentaire": "La réponse est partiellement correcte car le système ne sait pas les répondre, mais il a bien compris le contexte et utilisé les informations fournies pour évaluer la qualité de la réponse.",
+      "question": "Quels sont les trois principaux relais lymphatiques du cavum ?",
+      "SystemAnswer": "Selon le document [12-Cancer-du-cavum-2025-QCMed | Section: 2 Identifier les rapports anatomiques du cavum et ses relais de drainage lymphatique. (Fig 1)] , la paroi postéro-supérieure du cavum présente une formation lymphoïde (végétations adénoïdes). Cependant, il n'y a pas d'information directe sur les trois principaux relais lymphatiques du cavum dans ce document.\n\nJe ne sais pas."
+    },
+    {
+      "precision_contexte": 1.0,
+      "fidelite": 1.0,
+      "pertinence": 1.0,
+      "precision_sources": 1.0,
+      "commentaire": "La réponse est précise, fidèle et pertinente en ce qui concerne le contexte et les sources fournies.",
+      "question": "Quel est l’âge moyen de survenue du cancer du cavum dans les pays à haut risque ?",
+      "SystemAnswer": "Selon le contexte, l'âge moyen de survenue du CNP dans les pays à haut risque est en général de 50 ans. Cette information est mentionnée dans le document \"12-Cancer-du-cavum-2025-QCMed | Section: 3 Décrire les particularités épidémiologiques du CNP.\"\n\nCitation : [12-Cancer-du-cavum-2025-QCMed, Section 3.2 Age]"
+    },
+    {
+      "precision_contexte": 1.0,
+      "fidelite": 1.0,
+      "pertinence": 1.0,
+      "precision_sources": 1.0,
+      "commentaire": "La réponse est parfaitement adaptée au contexte et aux sources, elle est très précise et pertinente.",
+      "question": "Quels sont les principaux signes neuro-ophtalmiques du cancer du cavum ?",
+      "SystemAnswer": "Les principaux signes neuro-ophtalmiques du cancer du cavum sont :\n\n* Diplopie par atteinte du VI ou\n* Névralgie faciale supérieure par atteinte du V [12-Cancer-du-cavum-2025-QCMed, Section 6.4 Les signes neuro-ophtalmiques]\n\nIl peut également s'agir d'un trismus par atteinte du trijumeau moteur ou par envahissement tumoral des muscles ptérygoïdiens.\n\nEn outre, une atteinte oculo-orbitaire, le plus souvent à type d'exophtalmie ou de paralysie oculomotrice, est observée dans 5% des cas [12-Cancer-du-cavum-2025-QCMed, Section 6.4 Les signes neuro-ophtalmiques].\n\nCitation : [12-Cancer-du-cavum-2025-QCMed | Section: 6 Reconnaître à l’examen clinique les signes d’appel d’un cancer du cavum. > 6.4 Les signes neuro-ophtalmiques]"
+    },
+    {
+      "precision_contexte": 1.0,
+      "fidelite": 0.8,
+      "pertinence": 0.9,
+      "precision_sources": 1.0,
+      "commentaire": "La réponse est précise et fiable, mais le champ pertinence aurait pu être plus élevé si l'auteur avait explicitement mentionné les difficultés diagnostiques liées à la symptomatologie trompeuse.",
+      "question": "Pourquoi le diagnostic du cancer du cavum est-il souvent tardif ?",
+      "SystemAnswer": "Le diagnostic du cancer du cavum est souvent tardif en raison de la topographie profonde du cavum, qui rend difficile l'accès à l'examen physique. Selon le document [12-Cancer-du-cavum-2025-QCMed | Section: 2 Identifier les rapports anatomiques du cavum et ses relais de drainage lymphatique.], la situation profonde du nasopharynx, son accès difficile à l'examen physique, ainsi que la symptomatologie d'emprunt de son cancer, souvent trompeuse car liée à l'envahissement des structures avoisinantes, expliquent les difficultés diagnostiques."
+    },
+    {
+      "precision_contexte": 1.0,
+      "fidelite": 1.0,
+      "pertinence": 1.0,
+      "precision_sources": 1.0,
+      "commentaire": "La réponse est très précise, fidèle et pertinente, en soulignant le rôle important de l'infection par le virus EBV dans la survenue du cancer du cavum.",
+      "question": "Quels sont les facteurs impliqués dans l’étiologie du cancer du cavum ?",
+      "SystemAnswer": "Selon le contexte, les facteurs étiologiques impliqués dans l'étiologie du cancer du cavum sont liés à l'infection par le virus Epstein Barr (EBV), comme indiqué dans la citation [12-Cancer-du-cavum-2025-QCMed | Section: 1 Introduction] : \"Le type histologique le plus fréquent est représenté par le carcinome épidermoïde non kératinisant dont le prototype correspond au carcinome indifférencié de type nasopharyngé connu par l’usage sous l’acronyme UCNT ( *Undifferentiated Carcinoma of Nasopharyngeal Type* ) qui est en étroite liaison avec l’infection par le virus Epstein Barr (EBV).\"\n\nCes facteurs étiologiques sont également mentionnés dans la citation [12-Cancer-du-cavum-2025-QCMed | Section: 4 Décrire les aspects anatomopathologiques du CNP. > 4.2 Formes histologiques > 4.2.1 Forme commune] : \"L’UCNT représente environ 70% des cancers du cavum. Il est lié à des facteurs génétiques et à l’infection par le virus EBV.\""
+    },
+    {
+      "precision_contexte": 1.0,
+      "fidelite": 1.0,
+      "pertinence": 1.0,
+      "precision_sources": 1.0,
+      "commentaire": "La réponse est précise, fidèle et pertinente pour le contexte fourni, mais pourrait être améliorée en tenant compte des éléments supplémentaires mentionnés dans les sources.",
+      "question": "Quels éléments cliniques et paracliniques influencent le pronostic du cancer du cavum ?",
+      "SystemAnswer": "Selon le contexte, les éléments cliniques et paracliniques qui influencent le pronostic du cancer du cavum sont :\n\n* L'état général du patient évalué selon l'index de Karnofsky ou de l'OMS [12-Cancer-du-cavum-2025-QCMed | Section: 7 Etablir le diagnostic positif d’un cancer du cavum. > 7.1 Diagnostic positif > 7.1.2 Examen clinique > 7.1.2.6 Examen général]\n* La présence de métastases, notamment osseuse, hépatique ou pulmonaire [12-Cancer-du-cavum-2025-QCMed | Section: 7 Etablir le diagnostic positif d’un cancer du cavum. > 7.1 Diagnostic positif > 7.1.2 Examen clinique > 7.1.2.6 Examen général]\n* Le syndrome paranéoplasique, présent dans moins de 5% des cas [12-Cancer-du-cavum-2025-QCMed | Section: 7 Etablir le diagnostic positif d’un cancer du cavum. > 7.1 Diagnostic positif > 7.1.2 Examen clinique > 7.1.2.6 Examen général]\n\nIl est important de noter que ces éléments peuvent influencer le pronostic du cancer du cavum, mais il est possible qu'il y ait d'autres facteurs qui ne sont pas mentionnés dans ce contexte."
+    },
+    {
+      "precision_contexte": 1.0,
+      "fidelite": 1.0,
+      "pertinence": 1.0,
+      "precision_sources": 1.0,
+      "commentaire": "La réponse est très précise et fidèle au contexte, les sources sont pertinentes et bien citées.",
+      "question": "Quels examens sont utilisés pour le bilan d’extension locorégionale du cancer du cavum ?",
+      "SystemAnswer": "Selon le document \"12-Cancer-du-cavum-2025-QCMed\" | Section: 7 Etablir le diagnostic positif d’un cancer du cavum., les examens utilisés pour le bilan d’extension locorégionale du cancer du cavum sont :\n\n* TDM (Tomodensité Magnétique) du cavum [Document : 12-Cancer-du-cavum-2025-QCMed | Section: 7.2.2.1]\n* Endoscopie avec biopsie dirigée du cavum [Document : 12-Cancer-du-cavum-2025-QCMed | Section: 7.2.2.1]\n* Sérologie EBV [Document : 12-Cancer-du-cavum-2025-QCMed | Section: 7.2.2.1]\n* Idéalement un PET-scan [Document : 12-Cancer-du-cavum-2025-QCMed | Section: 7.2.2.1]\n* Cytoponction, qui peut être d’un grand apport diagnostique [Document : 12-Cancer-du-cavum-2025-QCMed | Section: 7.2.2.1]\n\nIl est également mentionné que la cervicotomie avec biopsie ganglionnaire et examen histologique extemporané ne doit être qu’un ultime recours, précédé d’une panendoscopie des VADS [Document : 12-Cancer-du-cavum-2025-QCMed | Section: 7.2.2.1]."
+    },
+    {
+      "precision_contexte": 1.0,
+      "fidelite": 1.0,
+      "pertinence": 1.0,
+      "precision_sources": 0.8,
+      "commentaire": "La réponse est correcte mais la précision des sources est mitigée car elle ne prend pas en compte le contexte du cours de résidanat et les sources fournies.",
+      "question": "Comment se manifeste une forme tubaire du cancer du cavum ?",
+      "SystemAnswer": "Je ne sais pas. Le contexte fourni ne mentionne pas la forme tubaire du cancer du cavum. Il est possible que cette information soit absente du document ou qu'elle ne soit pas pertinente pour le cours de résidanat en question."
+    },
+    {
+      "precision_contexte": 1.0,
+      "fidelite": 1.0,
+      "pertinence": 1.0,
+      "precision_sources": 1.0,
+      "commentaire": "La réponse est précise, fiable et pertinente, elle est également soutenue par les sources fournies.",
+      "question": "Quelles sont les zones géographiques à forte incidence du cancer du cavum et leurs taux ?",
+      "SystemAnswer": "Selon le contexte, les zones géographiques à forte incidence du cancer du cavum sont l'Asie du sud-est avec un taux d'incidence compris entre 30 à 80 pour 100000 par an. (Document: 12-Cancer-du-cavum-2025-QCMed | Section: 3 Décrire les particularités épidémiologiques du CNP. > 3.1 Incidence)"
+    },
+    {
+      "precision_contexte": 1.0,
+      "fidelite": 1.0,
+      "pertinence": 0.8,
+      "precision_sources": 1.0,
+      "commentaire": "La réponse est précise et fidèle au contexte, mais la pertinence pourrait être améliorée en incluant d'autres examens biologiques usuels pour le diagnostic du cancer du cavum.",
+      "question": "Quels examens biologiques sont réalisés avant le traitement du cancer du cavum ?",
+      "SystemAnswer": "Selon le contexte, les examens biologiques qui sont réalisés avant le traitement du cancer du cavum incluent une sérologie EBV. Cette information est mentionnée dans la section 7 Etablir le diagnostic positif d’un cancer du cavum. > 7.2 Formes cliniques > 7.2.2 Formes monosymptomatiques > 7.2.2.1 Formes révélées par une adénopathie cervicale en apparence primitive.\n\nCitation : [12-Cancer-du-cavum-2025-QCMed, Section 7 Etablir le diagnostic positif d’un cancer du cavum.]"
+    },
+    {
+      "precision_contexte": 1.0,
+      "fidelite": 1.0,
+      "pertinence": 1.0,
+      "precision_sources": 1.0,
+      "commentaire": "La réponse est précise, fidèle et pertinente en ce qui concerne le contexte et les sources fournies.",
+      "question": "Quels sont les critères T de la classification TNM du cancer du cavum ?",
+      "SystemAnswer": "Selon le document [12-Cancer-du-cavum-2025-QCMed | Section: 8 Etablir, à partir du bilan d’extension clinique et paraclinique la classification TNM du cancer du cavum. > 8.3 Classification TNM], les critères T de la classification TNM du cancer du cavum sont :\n\n* * T1 * * : tumeur confinee au nasopharynx ou s ’ etendant vers les tissus mous de l'oropharynx et / ou des fosses nasales sans extension parapharyngee.\n* * T2 * * : tumeur avec extension parapharyngee et / ou une infiltration du muscle pterygoidienmedial, du muscle pterygoidien lateral et / ou des muscles prevertebraux.\n* * T3 * * : tumeur avec envahissement des structures osseuses de la base du crane, des vertebres cervicales, des apophyses pterygoides et / ou des sinus paranasaux.\n* * T4 * * : extension intracranienne et / ou des nerfs craniens, de l ’ hypopharynx, de l ’ orbite, de la glande parotide et / ou une infiltration au - dela de la surface externe du muscle pterygoidien lateral."
+    },
+    {
+      "precision_contexte": 1.0,
+      "fidelite": 0.5,
+      "pertinence": 0.2,
+      "precision_sources": 0.8,
+      "commentaire": "La réponse est partiellement correcte, mais les formes histologiques rares du cancer du cavum sont plus largement définies que simplement les carcinomes épidermoïdes basaloïdes. La précision des sources est satisfaisante.",
+      "question": "Quelles sont les formes histologiques rares du cancer du cavum ?",
+      "SystemAnswer": "Selon le contexte, les formes histologiques rares du cancer du cavum sont les carcinomes épidermoïdes basaloïdes. Cette réponse est fondée sur l'extrait du document [12-Cancer-du-cavum-2025-QCMed | Section: 4 Décrire les aspects anatomopathologiques du CNP. > 4.2 Formes histologiques > 4.2.1 Forme commune] qui mentionne que ces formes sont \"très rares\"."
+    },
+    {
+      "precision_contexte": 1.0,
+      "fidelite": 1.0,
+      "pertinence": 1.0,
+      "precision_sources": 1.0,
+      "commentaire": "La réponse est précise, fidèle et pertinente en ce qui concerne le contexte du cancer du cavum. Les examens proposés sont également exactement les mêmes que ceux mentionnés dans le texte de référence.",
+      "question": "Quels examens permettent d’évaluer l’extension à distance du cancer du cavum ?",
+      "SystemAnswer": "Selon le contexte, les examens qui permettent d'évaluer l'extension à distance du cancer du cavum sont :\n\n* Un scanner thoracique\n* Un scanner abdominal (ou une échographie abdominale) +/- un angioscanner ou une IRM hépatique en cas de doute [12-Cancer-du-cavum-2025-QCMed | Section: 8.2 Bilan pré-thérapeutique > 8.2.2 Bilan d’extension à distance]\n* Une scintigraphie osseuse (+/- radiographies standards et/ou une IRM centrées sur les lésions suspectes)\n* Le Pet-scan ou TEP-TDM, qui est actuellement recommandé dans les formes localement avancées et est considéré comme l'examen le plus sensible et le plus spécifique pour détecter les métastases [12-Cancer-du-cavum-2025-QCMed | Section: 8.2 Bilan pré-thérapeutique > 8.2.2 Bilan d’extension à distance]\n\nCes examens permettent de détecter les métastases viscérales, osseuses et ganglionnaires extra-cervicales."
+    }
+  ]
+}
